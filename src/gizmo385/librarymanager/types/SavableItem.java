@@ -8,8 +8,8 @@ package gizmo385.librarymanager.types;
 public interface SavableItem
 {
 	/** toString() method specifically designed for saving into a file */
-	public String toSaveString();
+	String toSaveString();
 	
 	/** Generic toString() method for printing into console/text area */
-	public String toString();
+	String toString();
 }

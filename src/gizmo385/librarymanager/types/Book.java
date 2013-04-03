@@ -25,54 +25,98 @@ public class Book extends Item implements SavableItem
 	public Book( String name, int copies, SingleLinkedList<String> tags , String isbn, int yearPublished, String publisher, String author, String genre )
 	{
 		super( name, copies, tags, genre, isbn ); //call to super constructor (Item)
-		this.setAuthor( author );
-		this.setPublisher( publisher );
-		this.setYearPublished( yearPublished );
+		this.author =  author;
+		this.publisher = publisher;
+		this.yearPublished = yearPublished;
 		
 		this.addTag( author );
 		this.addTag( publisher );
 	}
 	
 	/** Returns the year published */
-	public int getYearPublished() { return this.yearPublished;}
+	public int getYearPublished()
+    {
+        return this.yearPublished;
+    }
 	
 	/** Returns the author */
-	public String getAuthor() { return this.author; }
+	public String getAuthor()
+    {
+        return this.author;
+    }
 	
 	/** Returns the publisher */
-	public String getPublisher() { return this.publisher; }
+	public String getPublisher()
+    {
+        return this.publisher;
+    }
 	
 	/** Sets the year published */
-	public void setYearPublished( int yearPublished ) { this.yearPublished = yearPublished; }
+	public void setYearPublished( int yearPublished )
+    {
+        this.yearPublished = yearPublished;
+    }
 	
 	/** Sets the author */
-	public void setAuthor( String author ) { this.author = author; }
+	public void setAuthor( String author )
+    {
+        this.author = author;
+    }
 	
 	/** Sets the publisher */
-	public void setPublisher( String publisher ) { this.publisher = publisher; }
+	public void setPublisher( String publisher )
+    {
+        this.publisher = publisher;
+    }
 
 	/** Returns a string representation of this item */
 	public String toString()
 	{
-		return super.toString() + "Author: " + this.getAuthor() + "\nGenre: " + 
-				this.getGenre() + "\nPublisher: " + this.getPublisher() + "\nYear Published: " 
-				+ this.getYearPublished() + "\nISBN: " + super.getId();
+        StringBuilder sb = new StringBuilder( "Author: " );
+        sb.append( this.getAuthor() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Genre: " );
+        sb.append( this.getGenre() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Publisher: " );
+        sb.append( this.getPublisher() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Year Published: " );
+        sb.append( this.getYearPublished() );
+        sb.append( System.lineSeparator() );
+        sb.append( "ISBN: " );
+        sb.append( super.getId() );
+
+        return sb.toString();
 	}
-	
+
+    /** Save data for this item */
 	public String toSaveString()
 	{
-		StringBuilder sb = new StringBuilder( "[book]" + System.lineSeparator() );
-		sb.append( this.getName() + System.lineSeparator() );
-		sb.append( this.getCopies() + System.lineSeparator() );
-		sb.append( this.getGenre() + System.lineSeparator() );
+		StringBuilder sb = new StringBuilder( "[book]" );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getName() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getCopies() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getGenre() );
+        sb.append( System.lineSeparator() );
 		
 		for( String s : this.getTags() )
-			sb.append( s.trim() + ";" );
+        {
+			sb.append( s.trim() );
+            sb.append( ";" );
+        }
 		
-		sb.append( System.lineSeparator() + this.getAuthor() + System.lineSeparator() );
-		sb.append( this.getPublisher() + System.lineSeparator() );
-		sb.append( this.getId() + System.lineSeparator() );
-		sb.append( this.getYearPublished() + System.lineSeparator() );
+		sb.append( System.lineSeparator() );
+        sb.append( this.getAuthor() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getPublisher() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getId() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getYearPublished() );
+        sb.append( System.lineSeparator() );
 		
 		return sb.toString();
 	}

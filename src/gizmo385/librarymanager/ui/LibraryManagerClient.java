@@ -17,18 +17,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 /**
  * GUI Client for the ItemLibrary class
@@ -42,8 +31,6 @@ public class LibraryManagerClient
 	final static String ADDGAME = "Add Game";
 	final static String ADDALBUM = "Add Album";
 	
-	String selectedSearchType = "";
-	
 	ItemLibrary library = new ItemLibrary();
 	
 	// Window components
@@ -51,17 +38,16 @@ public class LibraryManagerClient
 	JDialog aboutDialog;
 	JMenuBar jmb;
 	JMenu file, help, addItem;
-	JMenuItem save, load, exit, about, book, movie, videoGame, album, display; 
-	JTextArea detailedDisplay;
+	JMenuItem save, load, exit, remove, about, book, movie, videoGame, album, display;
+	JTextArea primaryDisplay;
 	JScrollPane jsc;
-	JTextField searchQuery, itemName, itemGenre, itemCopies, itemTags;
+	JTextField searchQuery;
 	JTextField albumArtist, albumBarcodeNumber, albumLabel, albumSongList, albumYearReleased, albumName, albumGenre, albumCopies, albumTags;
 	JTextField bookAuthor, bookIsbn, bookPublisher, bookYearPublished, bookName, bookGenre, bookCopies, bookTags;
 	JTextField movieDirector, movieRating, movieStarring, movieYearDirected, movieBarcodeNumber, movieName, movieGenre, movieCopies, movieTags;
 	JTextField gameBarcodeNumber, gameConsole, gameContentRating, gameDeveloper, gamePublisher, gameName, gameGenre, gameCopies, gameTags;
-	JButton submitSearch, cancelNewBook, cancelNewMovie, cancelNewVideoGame, cancelNewAlbum, addNewItem, submitBook, submitVideoGame, submitMovie, submitAlbum, displayLib, closeAboutDialog;
+	JButton submitSearch, cancelNewBook, cancelNewMovie, cancelNewVideoGame, cancelNewAlbum,submitBook, submitVideoGame, submitMovie, submitAlbum, displayLib, closeAboutDialog;
 	JPanel libraryDisplay, addBook, addMovie, addVideoGame, addAlbum, cards;
-	ArrayList<String> searchSelectionLabels;
 	CardLayout cardLayout = new CardLayout();
 	ButtonHandler bh = new ButtonHandler();
 	GridLayout layout = new GridLayout( 0, 2 );
@@ -93,14 +79,14 @@ public class LibraryManagerClient
 		
 		/* Frame settings */
 		frame = new JFrame( "Library Manager" );
-		frame.setSize( 530, 430 );
+		frame.setSize( 530, 450 );
 		frame.setResizable( false );
 		frame.setLocationRelativeTo( null );
 		frame.setVisible( true );
 		frame.setJMenuBar( jmb );
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		frame.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
 		
-		/* Set up cardlayout and add the cards to the frame */
+		/* Set up cardLayout and add the cards to the frame */
 		cards = new JPanel( cardLayout );
 		cards.add( libraryDisplay, MAINPANEL );
 		cards.add( addBook, ADDBOOK );
@@ -332,9 +318,35 @@ public class LibraryManagerClient
 			{
 				changeAboutDialogVisibility( true );
 			}
+            else if( ae.getSource() == remove ) //remove item
+            {
+                String nameOfItemToRemove = JOptionPane.showInputDialog( frame, "Enter item name: ", "Item Deletion", JOptionPane.QUESTION_MESSAGE );
+
+                for( Item i : library.getLibrary() )
+                {
+                    if( i.getName().equalsIgnoreCase( nameOfItemToRemove ) )
+                    {
+                        int confirm = JOptionPane.showConfirmDialog( frame, "Delete this item?\n" + i.toString() );
+
+                        if( confirm == JOptionPane.YES_OPTION )
+                        {
+                            library.removeItem( i );
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog( frame, "Canceling item deletion!", "Canceled!", JOptionPane.INFORMATION_MESSAGE );
+                        }
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog( frame, "Item could not be found!", "Not found!", JOptionPane.ERROR_MESSAGE );
+                    }
+                }
+            } // end remove
 		} //end ActionPerformed()
 	} // end ButtonHandler
-	
+
+    /** Sets up components for the about dialog */
 	public void setupAboutDialog()
 	{
 		closeAboutDialog = new JButton( "Close" );
@@ -353,16 +365,23 @@ public class LibraryManagerClient
 		aboutDialog.setModalityType( ModalityType.APPLICATION_MODAL );
 		aboutDialog.setVisible( false );
 	}
-	
-	public void changeAboutDialogVisibility( boolean visibility ) { aboutDialog.setVisible( visibility ); }
-	
+
+    /** Changes the visibility constant on the aboutDialog */
+	public void changeAboutDialogVisibility( boolean visibility )
+    {
+        aboutDialog.setVisible( visibility );
+    }
+
+    /** Sets up components for the main frame */
 	public void setupPrimary()
 	{
 		/* JMenuBar, JMenus, JMenuItems */
-		save = new JMenuItem( "Save library" );
+		save = new JMenuItem( "Save Library" );
 		save.addActionListener( bh );
-		load = new JMenuItem( "Load library" );
+		load = new JMenuItem( "Load Library" );
 		load.addActionListener( bh );
+        remove = new JMenuItem( "Remove Item");
+        remove.addActionListener( bh );
 		display = new JMenuItem( "Display Library" );
 		display.addActionListener( bh );
 		exit = new JMenuItem( "Exit" );
@@ -388,6 +407,7 @@ public class LibraryManagerClient
 		file.add( save );
 		file.add( load );
 		file.addSeparator();
+        file.add( remove );
 		file.add( display );
 		file.addSeparator();
 		file.add( exit );
@@ -401,10 +421,10 @@ public class LibraryManagerClient
 		jmb.add( help );
 		
 		/* Primary Library Display - Displays library contents & searches */
-		detailedDisplay = new JTextArea( 20, 43);
-		detailedDisplay.setToolTipText( "Library contents displayed here" );
-		detailedDisplay.setEditable( false );
-		jsc = new JScrollPane( detailedDisplay );
+		primaryDisplay = new JTextArea( 20, 43);
+		primaryDisplay.setToolTipText("Library contents displayed here");
+		primaryDisplay.setEditable(false);
+		jsc = new JScrollPane(primaryDisplay);
 		
 		searchQuery = new JTextField( 20 );
 		searchQuery.addActionListener( bh );
@@ -596,29 +616,28 @@ public class LibraryManagerClient
 	/** Displays all of the items within the library */
 	public void displayLibrary()
 	{
-		detailedDisplay.setText( "" );
+		primaryDisplay.setText("");
 		for( Item i : library.getLibrary() )
-			detailedDisplay.append( i.toString() + "\n\n" );
+			primaryDisplay.append( i.toString() + "\n\n" );
 		
-		detailedDisplay.setCaretPosition( 0 );
+		primaryDisplay.setCaretPosition(0);
 		searchQuery.setText("");
 	}
 	
 	/** Displays a set of items within the JTextArea */
 	public void displayResults( SingleLinkedList<Item> results )
 	{
-		detailedDisplay.setText( "" );
+		primaryDisplay.setText("");
 	
 		for( Item i : results )
-			detailedDisplay.append( i.toString() + "\n\n" );
+			primaryDisplay.append( i.toString() + "\n\n" );
 		
-		detailedDisplay.setCaretPosition( 0 );
+		primaryDisplay.setCaretPosition(0);
 	}
 	
 	/** Creates an instance of LibraryManagerClient */
 	public static void main( String[] args )
 	{
 		LibraryManagerClient lmc = new LibraryManagerClient();
-		lmc.frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 	}
 }

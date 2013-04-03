@@ -31,6 +31,14 @@ public class SingleLinkedList<E extends Comparable<E> > implements Iterable<E>
 	{
 		this.head = new LinkNode<E>();
 	}
+
+    public void addAll( SingleLinkedList<E> listToAddFrom )
+    {
+        for( E element : listToAddFrom )
+        {
+            this.insertInOrder( element );
+        }
+    }
 	
 	/**
 	 * Walks the list and attempts to locate the element specified
@@ -40,8 +48,12 @@ public class SingleLinkedList<E extends Comparable<E> > implements Iterable<E>
 	public E find( E elementToFind )
 	{
 		for( E element : this )
+        {
 			if( element.equals( elementToFind ) )
+            {
 				return element;
+            }
+        }
 		
 		return null;
 	}
@@ -55,7 +67,9 @@ public class SingleLinkedList<E extends Comparable<E> > implements Iterable<E>
 		LinkNode<E> current = this.head;
 		
 		while( current.getData() != null && current.getNext() != null && current.getData().compareTo( elementToAdd ) < 0 )
+        {
 			current = current.getNext();
+        }
 		
 		LinkNode<E> temp = new LinkNode<E>( current.getData(), current.getNext() );
 		current.setData( elementToAdd );
@@ -70,7 +84,9 @@ public class SingleLinkedList<E extends Comparable<E> > implements Iterable<E>
 		LinkNode<E> current = this.head;
 		
 		while( current.getData() != null && current.getNext() != null )
+        {
 			current = current.getNext();
+        }
 		
 		current.setData( elementToAdd );
 		current.setNext( new LinkNode<E>() );
@@ -83,18 +99,19 @@ public class SingleLinkedList<E extends Comparable<E> > implements Iterable<E>
 	 */
 	public boolean remove( E elementToRemove )
 	{
-		if( find( elementToRemove) == null )
-			return false;
-		else
-		{
-			LinkNode<E> current = this.head;
-			
-			while( current.getNext().getData().equals( elementToRemove ) == false )
-				current = current.getNext();
-			
-			current.setNext( current.getNext().getNext() );
-			
-			return true;
-		}
-	}
+        if( find( elementToRemove) == null )
+            return false;
+        else
+        {
+            LinkNode<E> current = this.head;
+
+            while( current.getNext() != null && !current.getData().equals( elementToRemove ) )
+                current = current.getNext();
+
+            current.setData( current.getNext().getData() );
+            current.setNext( current.getNext().getNext() );
+
+            return true;
+        }
+	}// end remove
 }

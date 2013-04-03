@@ -28,15 +28,6 @@ public class ItemLibrary
 	public ItemLibrary() { };
 
 	/**
-	 * Add an initial Item to the library
-	 * @param firstItem The Item to add
-	 */
-	public ItemLibrary( Item firstItem )
-	{
-		this.userLibrary.insertInOrder( firstItem );
-	}
-
-	/**
 	 * Add multiple items to the library
 	 * @param items An array of Items to add to the list
 	 */
@@ -236,7 +227,7 @@ public class ItemLibrary
 
 				else
 				{
-					castTag = fileScan.nextLine();
+                    castTag = fileScan.nextLine();
 				}
 			}
 
@@ -292,17 +283,7 @@ public class ItemLibrary
 
 			for( Item i : this.userLibrary )
 			{
-				if( i instanceof Book )
-					fileOut.write( ((Book)i).toSaveString() );
-				
-				else if( i instanceof Movie )
-					fileOut.write( ((Movie)i).toSaveString() );
-				
-				else if( i instanceof VideoGame )
-					fileOut.write( ((VideoGame)i).toSaveString() );
-				
-				else if( i instanceof Album )
-					fileOut.write( ((Album)i).toSaveString() );
+				fileOut.write( i.toSaveString() );
 			}
 			fileOut.close();
 		}

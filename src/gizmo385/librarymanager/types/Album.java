@@ -41,78 +41,144 @@ public class Album extends Item implements SavableItem
 	}
 
 	/** Returns the artist */
-	public String getArtist() { return this.artist; }
+	public String getArtist()
+    {
+        return this.artist;
+    }
 
 	/** Returns the label */
-	public String getLabel() { return this.label; }
+	public String getLabel()
+    {
+        return this.label;
+    }
 
 	/** Returns the year released */
-	public int getYearReleased() { return this.yearReleased; }
+	public int getYearReleased()
+    {
+        return this.yearReleased;
+    }
 
 	/** Returns the number of songs */
-	public int getNumberOfSongs() { return this.songList.length; }
+	public int getNumberOfSongs()
+    {
+        return this.songList.length;
+    }
 
 	/** Returns a copy of the song list */
-	public String[] getSongList() { return Arrays.copyOf( this.songList, this.songList.length ); }
+	public String[] getSongList()
+    {
+        return Arrays.copyOf( this.songList, this.songList.length );
+    }
 
 	/** Sets the artist */
-	public void setArtist( String artist ) { this.artist = artist; }
+	public void setArtist( String artist )
+    {
+        this.artist = artist;
+    }
 
 	/** Sets the label */
-	public void setLabel( String label ) { this.label = label; }
+	public void setLabel( String label )
+    {
+        this.label = label;
+    }
 
 	/** Sets the year released */
-	public void setYearReleased( int yearReleased ) { this.yearReleased = yearReleased; }
+	public void setYearReleased( int yearReleased )
+    {
+        this.yearReleased = yearReleased;
+    }
 
 	/** Copies the passed array */
-	public void setSongList( String[] songList ) { this.songList = Arrays.copyOf( songList, songList.length ); }
+	public void setSongList( String[] songList )
+    {
+        this.songList = Arrays.copyOf( songList, songList.length );
+    }
 
 	/** Returns a string representation of this album */
 	public String toString()
 	{
-		StringBuilder temp = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
 
-		temp.append( super.toString() );
-		temp.append( "Artist: " + this.getArtist() + "\nSong List: " );
+		sb.append( super.toString() );
+		sb.append("Artist: " );
+        sb.append( this.artist );
+        sb.append( System.lineSeparator() );
+        sb.append( "Song List: " );
 		//Add songList
 		if( this.songList.length == 1 )
-			temp.append( this.songList[0] + "\n" );
+        {
+			sb.append( this.songList[0] );
+            sb.append( System.lineSeparator() );
+        }
 		else if( this.songList.length == 2 )
-			temp.append( this.songList[0] + " and " + this.songList[1] + "\n" );
+        {
+			sb.append( this.songList[0] + " and " + this.songList[1] + "\n" );
+            sb.append( " and " );
+            sb.append( this.songList[1] );
+            sb.append( System.lineSeparator() );
+        }
 		else
 		{
 			for( int i = 0; i < this.songList.length - 1; i++ )
-				temp.append( this.songList[i] + ", " );
+            {
+				sb.append( this.songList[i]);
+                sb.append( ", " );
+            }
 
-			temp.append( " and " + this.songList[ this.songList.length - 1 ] + "\n" );
+			sb.append( " and " );
+            sb.append( this.songList[ this.songList.length - 1 ] );
+            sb.append( System.lineSeparator() );
 		}
 
-		temp.append( "Genre: " + this.getGenre() + "\nLabel: " + this.getLabel() + 
-				"\nYear Released: " + this.getYearReleased() + "\nBarcode Number: " + super.getId() );
+		sb.append("Genre: " );
+        sb.append( this.getGenre() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Label: " );
+        sb.append( this.getLabel() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Year Released: " );
+        sb.append( this.getYearReleased() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Barcode Number: " );
+        sb.append( super.getId() );
 
-
-		return temp.toString();
+		return sb.toString();
 	}
 	
 	public String toSaveString()
 	{
-		StringBuilder sb = new StringBuilder( "[movie]" + System.lineSeparator() );
-		sb.append( this.getName() + System.lineSeparator() );
-		sb.append( this.getCopies() + System.lineSeparator() );
-		sb.append( this.getGenre() + System.lineSeparator() );
+		StringBuilder sb = new StringBuilder( "[movie]" );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getName());
+        sb.append( System.lineSeparator() );
+		sb.append( this.getCopies() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getGenre() );
+        sb.append( System.lineSeparator() );
 		
 		for( String s : this.getTags() )
-			sb.append( s.trim() + ";" );
+        {
+			sb.append( s.trim() );
+            sb.append( ";" );
+        }
 		
 		sb.append( System.lineSeparator() );
 		
 		for( String s : this.songList )
-			sb.append( s.trim() + "," );
+        {
+			sb.append( s.trim() );
+            sb.append( "," );
+        }
 		
-		sb.append( System.lineSeparator()+ this.getArtist() + System.lineSeparator() );
-		sb.append( this.getLabel() + System.lineSeparator() );
-		sb.append( this.getId() + System.lineSeparator() );
-		sb.append( this.getYearReleased() + System.lineSeparator() );
+		sb.append( System.lineSeparator() );
+        sb.append( this.getArtist() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getLabel() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getId() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getYearReleased() );
+        sb.append( System.lineSeparator() );
 		
 		return sb.toString();
 	}

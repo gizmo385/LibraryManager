@@ -61,26 +61,55 @@ public class VideoGame extends Item implements SavableItem
 	/** Returns a string representation of this VideoGame */
 	public String toString()
 	{
-		return super.toString() + "Genre: " + this.getGenre() + "\nConsole: " + this.getConsole() + 
-				"\nDeveloper: " + this.getDeveloper() + "\nPublisher: " + this.getPublisher() + "\nConsole Rating: " + 
-				this.getContentRating() + "\nBarcode Number: " + super.getId();
+        StringBuilder sb = new StringBuilder( "Genre: " );
+        sb.append( this.getGenre() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Console: " );
+        sb.append( this.getConsole() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Developer: " );
+        sb.append( this.getDeveloper() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Publisher: " );
+        sb.append( this.getPublisher() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Content Rating: " );
+        sb.append( this.getContentRating() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Barcode Number: " );
+        sb.append( super.getId() );
+
+        return sb.toString();
 	}
 	
 	public String toSaveString()
 	{
-		StringBuilder sb = new StringBuilder( "[videogame]" + System.lineSeparator() );
-		sb.append( this.getName() + System.lineSeparator() );
-		sb.append( this.getCopies() + System.lineSeparator() );
-		sb.append( this.getGenre() + System.lineSeparator() );
+		StringBuilder sb = new StringBuilder( "[videogame]" );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getName() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getCopies() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getGenre() );
+        sb.append( System.lineSeparator() );
 		
 		for( String s : this.getTags() )
-			sb.append( s.trim() + ";" );
-		
-		sb.append( System.lineSeparator() + this.getDeveloper() + System.lineSeparator() );
-		sb.append( this.getPublisher() + System.lineSeparator() );
-		sb.append( this.getConsole() + System.lineSeparator() );
-		sb.append( this.getContentRating() + System.lineSeparator() );
-		sb.append( this.getId() + System.lineSeparator() );
+        {
+			sb.append( s.trim() );
+            sb.append( ";" );
+        }
+
+        sb.append( System.lineSeparator() );
+		sb.append( this.getDeveloper() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getPublisher() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getConsole() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getContentRating() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getId() );
+        sb.append( System.lineSeparator() );
 		
 		return sb.toString();
 	}

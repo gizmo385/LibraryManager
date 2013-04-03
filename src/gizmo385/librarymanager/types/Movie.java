@@ -104,50 +104,88 @@ public class Movie extends Item implements SavableItem
 	 */
 	public String toString()
 	{
-		String temp = "";
-		temp += super.toString();
-		temp += "Starring: ";
+		StringBuilder sb = new StringBuilder();
+		sb.append( super.toString() );
+		sb.append( "Starring: " );
 
 		//Add starring
 		if( this.starring.length == 1 )
-			temp += this.starring[0] + "\n";
+        {
+			sb.append( this.starring[0] );
+            sb.append( System.lineSeparator() );
+        }
 		else if( this.starring.length == 2 )
-			temp += this.starring[0] + " and " + this.starring[1] + "\n";
+        {
+            sb.append( this.starring[0] );
+            sb.append( " and " );
+            sb.append( this.starring[1] );
+            sb.append( System.lineSeparator() );
+        }
 		else
 		{
 			for( int i = 0; i < this.starring.length - 1; i++ )
-				temp += this.starring[i] + ", ";
-
-			temp += " and " + this.starring[ this.starring.length - 1 ] + "\n";
+            {
+				sb.append( this.starring[i] );
+                sb.append( ", ");
+            }
+            sb.append( " and " );
+            sb.append( this.starring[ this.starring.length - 1 ] );
+            sb.append( System.lineSeparator() );
 		}
 
-		temp += "Genre: " + this.getGenre() + "\nDirector: " + this.getDirector() + "\nRating: " + 
-				this.getRating() + "\nDirected in: " + this.getYearDirected() + "\nBarcode Number: " + 
-				super.getId();
+        sb.append( "Genre: " );
+        sb.append( this.getGenre() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Director: " );
+        sb.append( this.getDirector() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Rating: " );
+        sb.append( this.getRating() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Directed in: " );
+        sb.append( this.getYearDirected() );
+        sb.append( System.lineSeparator() );
+        sb.append( "Barcode Number: " );
+        sb.append( super.getId() );
 
-
-		return temp;
+		return sb.toString();
 	}
-	
+
+    /** String that gets saved to the library file */
 	public String toSaveString()
 	{
-		StringBuilder sb = new StringBuilder( "[movie]" + System.lineSeparator() );
-		sb.append( this.getName() + System.lineSeparator() );
-		sb.append( this.getCopies() + System.lineSeparator() );
-		sb.append( this.getGenre() + System.lineSeparator() );
+		StringBuilder sb = new StringBuilder( "[movie]" );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getName() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getCopies() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getGenre() );
+        sb.append( System.lineSeparator() );
 		
 		for( String s : this.getTags() )
-			sb.append( s.trim() + ";" );
+        {
+			sb.append( s.trim() );
+            sb.append( ";" );
+        }
 		
 		sb.append( System.lineSeparator() );
 		
 		for( String s : this.starring )
-			sb.append( s.trim() + "," );
-		
-		sb.append( System.lineSeparator() + this.getDirector() + System.lineSeparator() );
-		sb.append( this.getRating() + System.lineSeparator() );
-		sb.append( this.getId() + System.lineSeparator() );
-		sb.append( this.getYearDirected() + System.lineSeparator() );
+        {
+			sb.append( s.trim() );
+            sb.append( "," );
+        }
+
+        sb.append( System.lineSeparator() );
+		sb.append( this.getDirector() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getRating() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getId() );
+        sb.append( System.lineSeparator() );
+		sb.append( this.getYearDirected() );
+        sb.append( System.lineSeparator() );
 		
 		return sb.toString();
 	}

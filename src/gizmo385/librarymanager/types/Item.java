@@ -7,7 +7,7 @@ import gizmo385.datastructures.sll.SingleLinkedList;
  * @author cachapline8
  *
  */
-public class Item implements Comparable<Item>
+public class Item implements Comparable<Item>, SavableItem
 {
 	private String name, genre, id;
 	private int copies;
@@ -20,11 +20,11 @@ public class Item implements Comparable<Item>
 	 */
 	public Item( String name, int copies, SingleLinkedList<String> tags, String genre, String id )
 	{
-		this.setCopies( copies );
-		this.setName( name );
-		this.setGenre( genre );
-		this.setId(id);
-		this.setTags( tags );
+		this.copies = copies > 0 ? copies : 0;
+		this.name = name;
+		this.genre = genre;
+		this.id = id;
+		this.tags.addAll( tags );
 	}
 
 	/** Returns the name */
@@ -44,26 +44,34 @@ public class Item implements Comparable<Item>
 	{
 		SingleLinkedList<String> tagsCopy = new SingleLinkedList<String>();
 		
-		for( String s : this.tags )
-			tagsCopy.insertInOrder( s.toLowerCase() );
+		tagsCopy.addAll( this.tags );
 		
 		return tagsCopy;
 	}
 
 	/** Sets the name */
-	public void setName( String name ) { this.name = name; }
+	public void setName( String name )
+    {
+        this.name = name;
+    }
 	
 	/** Sets the genre */
-	public void setGenre( String genre ) { this.genre = genre; }
+	public void setGenre( String genre )
+    {
+        this.genre = genre;
+    }
 	
 	/** Sets the genre (ISBN, barcode, etc) */
-	public void setId( String id ) { this.id = id; }
+	public void setId( String id )
+    {
+        this.id = id;
+    }
 
 	/** Sets the tags */
 	public void setTags( SingleLinkedList<String> tags )
 	{
-		for( String s : tags )
-			this.tags.insertInOrder( s );
+		this.tags = new SingleLinkedList<String>();
+        tags.addAll( tags );
 		
 		//adds the title as a tag by default	
 		this.tags.insertInOrder( this.name ); 
@@ -74,10 +82,7 @@ public class Item implements Comparable<Item>
 	/** Validates and sets copies */
 	public void setCopies( int copies )
 	{
-		if( copies >= 0 )
-			this.copies = copies;
-		else
-			this.copies = 0;
+        this.copies = copies > 0 ? copies : 0;
 	}
 	
 	public void addTag( String tag )
@@ -86,8 +91,34 @@ public class Item implements Comparable<Item>
 	}
 
 	/** Returns the String.compareTo() for the name */
-	public int compareTo( Item other ) { return this.getName().compareTo( other.getName() ); }
+	public int compareTo( Item other )
+    {
+        return this.getName().compareTo( other.getName() );
+    }
 
 	/** String representation of this Item */
-	public String toString() { return "Name: " + this.getName() + "\nCopies: " + this.getCopies() + "\n"; }
+	public String toString()
+    {
+        return "Name: " + this.getName() + "\nCopies: " + this.getCopies() + "\n";
+    }
+
+    /** Save data for this item */
+    public String toSaveString()
+    {
+        StringBuilder sb = new StringBuilder( "[item]" );
+        sb.append( this.name );
+        sb.append( System.lineSeparator() );
+        sb.append( this.copies );
+        sb.append( System.lineSeparator() );
+        sb.append( this.genre );
+        sb.append( System.lineSeparator() );
+        for( String s : this.tags )
+        {
+            sb.append( s.trim() );
+            sb.append( ";" );
+        }
+        sb.append( System.lineSeparator() );
+
+        return sb.toString();
+    }
 } // end Item superclass
