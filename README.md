@@ -19,7 +19,7 @@
 
 <center>
 Folder Layout
-======================
+==============
  </center>
 <p>The folders within this project are layed out like so:
 <ul>
@@ -30,7 +30,8 @@ Folder Layout
 <li> datastructures - contains all source files for the SingleLinkedList and its utilities </li></ul>
 <ul><li>librarymanager - contains all files related to the library
 <ul><li>ui - the projects user interface - created using the swing libraries </li>
-<li>types - contains class files for all types of items managed in the libraries </li></ul></ul></ul>
+<li>types - contains class files for all types of items managed in the libraries </li></ul>
+<li>util - Logger files and other utilities that will be added</li></ul></ul>
 <li>doc - javadoc files for the project </li>
 </ul></p>
 <br><hr>
