@@ -7,6 +7,7 @@ import gizmo385.librarymanager.types.Book;
 import gizmo385.librarymanager.types.Item;
 import gizmo385.librarymanager.types.Movie;
 import gizmo385.librarymanager.types.VideoGame;
+import gizmo385.util.Logger;
 
 import java.awt.CardLayout;
 import java.awt.Dialog.ModalityType;
@@ -17,7 +18,19 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 /**
  * GUI Client for the ItemLibrary class
@@ -25,37 +38,41 @@ import javax.swing.*;
  */
 public class LibraryManagerClient
 {
-	final static String MAINPANEL = "Library Display";
-	final static String ADDBOOK = "Add Book";
-	final static String ADDMOVIE = "Add Movie";
-	final static String ADDGAME = "Add Game";
-	final static String ADDALBUM = "Add Album";
+	private final static String MAINPANEL = "Library Display";
+	private final static String ADDBOOK = "Add Book";
+	private final static String ADDMOVIE = "Add Movie";
+	private final static String ADDGAME = "Add Game";
+	private final static String ADDALBUM = "Add Album";
 	
-	ItemLibrary library = new ItemLibrary();
+	private ItemLibrary library = new ItemLibrary();
+	
+	private Logger actionLog = new Logger( "lmLog.txt" );
 	
 	// Window components
-	JFrame frame;
-	JDialog aboutDialog;
-	JMenuBar jmb;
-	JMenu file, help, addItem;
-	JMenuItem save, load, exit, remove, about, book, movie, videoGame, album, display;
-	JTextArea primaryDisplay;
-	JScrollPane jsc;
-	JTextField searchQuery;
-	JTextField albumArtist, albumBarcodeNumber, albumLabel, albumSongList, albumYearReleased, albumName, albumGenre, albumCopies, albumTags;
-	JTextField bookAuthor, bookIsbn, bookPublisher, bookYearPublished, bookName, bookGenre, bookCopies, bookTags;
-	JTextField movieDirector, movieRating, movieStarring, movieYearDirected, movieBarcodeNumber, movieName, movieGenre, movieCopies, movieTags;
-	JTextField gameBarcodeNumber, gameConsole, gameContentRating, gameDeveloper, gamePublisher, gameName, gameGenre, gameCopies, gameTags;
-	JButton submitSearch, cancelNewBook, cancelNewMovie, cancelNewVideoGame, cancelNewAlbum,submitBook, submitVideoGame, submitMovie, submitAlbum, displayLib, closeAboutDialog;
-	JPanel libraryDisplay, addBook, addMovie, addVideoGame, addAlbum, cards;
-	CardLayout cardLayout = new CardLayout();
-	ButtonHandler bh = new ButtonHandler();
-	GridLayout layout = new GridLayout( 0, 2 );
+	private JFrame frame;
+	private JDialog aboutDialog;
+	private JMenuBar jmb;
+	private JMenu file, help, addItem;
+	private JMenuItem save, load, exit, remove, about, book, movie, videoGame, album, display;
+	private JTextArea primaryDisplay;
+	private JScrollPane jsc;
+	private JTextField searchQuery;
+	private JTextField albumArtist, albumBarcodeNumber, albumLabel, albumSongList, albumYearReleased, albumName, albumGenre, albumCopies, albumTags;
+	private JTextField bookAuthor, bookIsbn, bookPublisher, bookYearPublished, bookName, bookGenre, bookCopies, bookTags;
+	private JTextField movieDirector, movieRating, movieStarring, movieYearDirected, movieBarcodeNumber, movieName, movieGenre, movieCopies, movieTags;
+	private JTextField gameBarcodeNumber, gameConsole, gameContentRating, gameDeveloper, gamePublisher, gameName, gameGenre, gameCopies, gameTags;
+	private JButton submitSearch, cancelNewBook, cancelNewMovie, cancelNewVideoGame, cancelNewAlbum,submitBook, submitVideoGame, submitMovie, submitAlbum, displayLib, closeAboutDialog;
+	private JPanel libraryDisplay, addBook, addMovie, addVideoGame, addAlbum, cards;
+	private CardLayout cardLayout = new CardLayout();
+	private ButtonHandler bh = new ButtonHandler();
+	private GridLayout layout = new GridLayout( 0, 2 );
 	
 	
 	/** Sets up the frame and calls methods to instantiate frame components */
 	public LibraryManagerClient()
 	{	
+		this.actionLog.publishToLog( "Initiallizing LibraryManagerClient" );
+		
 		/* Set layout gap */
 		layout.setVgap( 20 );
 		
@@ -108,28 +125,34 @@ public class LibraryManagerClient
 	{
 		public void actionPerformed( ActionEvent ae )
 		{
+			
 			if( ae.getSource() == book ) // Add a book
 			{
+				actionLog.publishToLog( "Switching display to ADDBOOK" );
 				cardLayout.show( cards, ADDBOOK );
 				frame.setTitle( "Library Manager - Add Book" );
 			}
 			else if( ae.getSource() == movie ) // Add a movie
 			{
+				actionLog.publishToLog( "Switching display to ADDMOVE" );
 				cardLayout.show( cards, ADDMOVIE );
 				frame.setTitle( "Library Manager - Add Movie" );
 			}
 			else if( ae.getSource() == videoGame ) // Add a video game
 			{
+				actionLog.publishToLog( "Switching display to ADDGAME" );
 				cardLayout.show( cards, ADDGAME );
 				frame.setTitle( "Library Manager - Add Video Game" );
 			}
 			else if( ae.getSource() == album ) // Add an album
 			{
+				actionLog.publishToLog( "Switching display to ADDALBUM" );
 				cardLayout.show( cards, ADDALBUM ); 
 				frame.setTitle( "Library Manager - Add Album" );
 			}
 			else if( ae.getSource() == cancelNewMovie || ae.getSource() == cancelNewBook || ae.getSource() == cancelNewVideoGame || ae.getSource() == cancelNewAlbum ) // Main panel
 			{
+				actionLog.publishToLog( "Switching display to MAINPANEL" );
 				cardLayout.show( cards, MAINPANEL );
 				frame.setTitle( "Library Manager" );
 			}
@@ -139,6 +162,7 @@ public class LibraryManagerClient
 			}
 			else if( ae.getSource() == exit ) // Exit
 			{
+				actionLog.publishToLog( "Closing Library Manager application" );
 				System.exit( 1 );
 			}
 			else if( ae.getSource() == closeAboutDialog ) // close about dialog
@@ -153,6 +177,8 @@ public class LibraryManagerClient
 			} // end search
 			else if( ae.getSource() == submitBook ) //Submit a book
 			{
+				actionLog.publishToLog( "Adding new Book" );
+				
 				Scanner tagParser = new Scanner( bookTags.getText() );
 				tagParser.useDelimiter( ";" );
 				SingleLinkedList<String> tags = new SingleLinkedList<String>();
@@ -185,6 +211,8 @@ public class LibraryManagerClient
 			}
 			else if( ae.getSource() == submitVideoGame ) // Submit a video game
 			{
+				actionLog.publishToLog( "Adding new VideoGame" );
+				
 				Scanner tagParser = new Scanner( gameTags.getText() );
 				tagParser.useDelimiter( ";" );
 				SingleLinkedList<String> tags = new SingleLinkedList<String>();
@@ -218,6 +246,8 @@ public class LibraryManagerClient
 			}
 			else if( ae.getSource() == submitMovie ) // Submit a movie
 			{
+				actionLog.publishToLog( "Adding new Movie" );
+				
 				Scanner tagParser = new Scanner( movieTags.getText() );
 				tagParser.useDelimiter( ";" );
 				SingleLinkedList<String> tags = new SingleLinkedList<String>();
@@ -262,6 +292,8 @@ public class LibraryManagerClient
 			}
 			else if( ae.getSource() == submitAlbum ) // Submit an album
 			{
+				actionLog.publishToLog( "Adding new Album" );
+				
 				Scanner tagParser = new Scanner( albumTags.getText() );
 				tagParser.useDelimiter( ";" );
 				SingleLinkedList<String> tags = new SingleLinkedList<String>();
@@ -320,6 +352,8 @@ public class LibraryManagerClient
 			}
             else if( ae.getSource() == remove ) //remove item
             {
+            	actionLog.publishToLog( "Performing Removal" );
+            	
                 String nameOfItemToRemove = JOptionPane.showInputDialog( frame, "Enter item name: ", "Item Deletion", JOptionPane.QUESTION_MESSAGE );
 
                 for( Item i : library.getLibrary() )
@@ -349,6 +383,8 @@ public class LibraryManagerClient
     /** Sets up components for the about dialog */
 	public void setupAboutDialog()
 	{
+		actionLog.publishToLog( "Setting up AboutDialog..." );
+		
 		closeAboutDialog = new JButton( "Close" );
 		closeAboutDialog.addActionListener( bh );
 		
@@ -369,12 +405,16 @@ public class LibraryManagerClient
     /** Changes the visibility constant on the aboutDialog */
 	public void changeAboutDialogVisibility( boolean visibility )
     {
+		actionLog.publishToLog( "Changing aboutDialog visibility from " + aboutDialog.isVisible() + " to " + visibility );
+		
         aboutDialog.setVisible( visibility );
     }
 
     /** Sets up components for the main frame */
 	public void setupPrimary()
 	{
+		actionLog.publishToLog( "Setting up primary JPanel..." );
+		
 		/* JMenuBar, JMenus, JMenuItems */
 		save = new JMenuItem( "Save Library" );
 		save.addActionListener( bh );
@@ -446,6 +486,8 @@ public class LibraryManagerClient
 	/** Sets up the addBook JPanel */
 	public void setupAddBookLayout()
 	{
+		actionLog.publishToLog( "Setting up addBook..." );
+		
 		bookAuthor = new JTextField( 12 );
 		bookIsbn = new JTextField( 12 );
 		bookPublisher = new JTextField( 12 );
@@ -486,6 +528,8 @@ public class LibraryManagerClient
 	/** Sets up the addMovie JPanel */
 	public void setupAddMovieLayout()
 	{
+		actionLog.publishToLog( "Setting up addMove..." );
+		
 		movieDirector = new JTextField( 12 );
 		movieRating = new JTextField( 12 );
 		movieStarring = new JTextField( 20 );
@@ -529,6 +573,8 @@ public class LibraryManagerClient
 	/** Sets up the layout of the addVideoGame JPanel */
 	public void setupAddVideoGameLayout()
 	{
+		actionLog.publishToLog( "Setting up addVideoGame..." );
+		
 		gameName = new JTextField( 12 );
 		gameGenre = new JTextField( 12 );
 		gameCopies = new JTextField( 3 );
@@ -572,6 +618,8 @@ public class LibraryManagerClient
 	/** Sets up the layout of addAlbum JPanel */
 	public void setupAddAlbumLayout()
 	{
+		actionLog.publishToLog( "Setting up addAlbum..." );
+		
 		albumName = new JTextField( 12 );
 		albumGenre = new JTextField( 12 );
 		albumCopies = new JTextField( 3 );
@@ -616,6 +664,8 @@ public class LibraryManagerClient
 	/** Displays all of the items within the library */
 	public void displayLibrary()
 	{
+		actionLog.publishToLog( "Updating library display" );
+		
 		primaryDisplay.setText("");
 		for( Item i : library.getLibrary() )
 			primaryDisplay.append( i.toString() + "\n\n" );
@@ -627,6 +677,8 @@ public class LibraryManagerClient
 	/** Displays a set of items within the JTextArea */
 	public void displayResults( SingleLinkedList<Item> results )
 	{
+		actionLog.publishToLog( "Displaying search results" );
+		
 		primaryDisplay.setText("");
 	
 		for( Item i : results )
@@ -638,6 +690,7 @@ public class LibraryManagerClient
 	/** Creates an instance of LibraryManagerClient */
 	public static void main( String[] args )
 	{
+		@SuppressWarnings("unused")
 		LibraryManagerClient lmc = new LibraryManagerClient();
 	}
 }
