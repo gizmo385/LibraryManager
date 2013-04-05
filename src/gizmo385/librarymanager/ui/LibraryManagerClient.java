@@ -25,32 +25,32 @@ import javax.swing.*;
  */
 public class LibraryManagerClient
 {
-	final static String MAINPANEL = "Library Display";
-	final static String ADDBOOK = "Add Book";
-	final static String ADDMOVIE = "Add Movie";
-	final static String ADDGAME = "Add Game";
-	final static String ADDALBUM = "Add Album";
+	private final static String MAINPANEL = "Library Display";
+	private final static String ADDBOOK = "Add Book";
+	private final static String ADDMOVIE = "Add Movie";
+	private final static String ADDGAME = "Add Game";
+	private final static String ADDALBUM = "Add Album";
 	
 	ItemLibrary library = new ItemLibrary();
 	
 	// Window components
-	JFrame frame;
-	JDialog aboutDialog;
-	JMenuBar jmb;
-	JMenu file, help, addItem;
-	JMenuItem save, load, exit, remove, about, book, movie, videoGame, album, display;
-	JTextArea primaryDisplay;
-	JScrollPane jsc;
-	JTextField searchQuery;
-	JTextField albumArtist, albumBarcodeNumber, albumLabel, albumSongList, albumYearReleased, albumName, albumGenre, albumCopies, albumTags;
-	JTextField bookAuthor, bookIsbn, bookPublisher, bookYearPublished, bookName, bookGenre, bookCopies, bookTags;
-	JTextField movieDirector, movieRating, movieStarring, movieYearDirected, movieBarcodeNumber, movieName, movieGenre, movieCopies, movieTags;
-	JTextField gameBarcodeNumber, gameConsole, gameContentRating, gameDeveloper, gamePublisher, gameName, gameGenre, gameCopies, gameTags;
-	JButton submitSearch, cancelNewBook, cancelNewMovie, cancelNewVideoGame, cancelNewAlbum,submitBook, submitVideoGame, submitMovie, submitAlbum, displayLib, closeAboutDialog;
-	JPanel libraryDisplay, addBook, addMovie, addVideoGame, addAlbum, cards;
-	CardLayout cardLayout = new CardLayout();
-	ButtonHandler bh = new ButtonHandler();
-	GridLayout layout = new GridLayout( 0, 2 );
+	private JFrame frame;
+	private JDialog aboutDialog;
+	private JMenuBar jmb;
+	private JMenu file, help, addItem;
+	private JMenuItem save, load, exit, remove, about, book, movie, videoGame, album, display;
+	private JTextArea primaryDisplay;
+	private JScrollPane jsc;
+	private JTextField searchQuery;
+	private JTextField albumArtist, albumBarcodeNumber, albumLabel, albumSongList, albumYearReleased, albumName, albumGenre, albumCopies, albumTags;
+	private JTextField bookAuthor, bookIsbn, bookPublisher, bookYearPublished, bookName, bookGenre, bookCopies, bookTags;
+	private JTextField movieDirector, movieRating, movieStarring, movieYearDirected, movieBarcodeNumber, movieName, movieGenre, movieCopies, movieTags;
+	private JTextField gameBarcodeNumber, gameConsole, gameContentRating, gameDeveloper, gamePublisher, gameName, gameGenre, gameCopies, gameTags;
+	private JButton submitSearch, cancelNewBook, cancelNewMovie, cancelNewVideoGame, cancelNewAlbum,submitBook, submitVideoGame, submitMovie, submitAlbum, displayLib, closeAboutDialog;
+	private JPanel libraryDisplay, addBook, addMovie, addVideoGame, addAlbum, cards;
+	private CardLayout cardLayout = new CardLayout();
+	private ButtonHandler bh = new ButtonHandler();
+	private GridLayout layout = new GridLayout( 0, 2 );
 	
 	
 	/** Sets up the frame and calls methods to instantiate frame components */
@@ -638,6 +638,7 @@ public class LibraryManagerClient
 	/** Creates an instance of LibraryManagerClient */
 	public static void main( String[] args )
 	{
+		@SuppressWarnings("unused")
 		LibraryManagerClient lmc = new LibraryManagerClient();
 	}
 }
