@@ -6,6 +6,7 @@ import gizmo385.librarymanager.types.Book;
 import gizmo385.librarymanager.types.Item;
 import gizmo385.librarymanager.types.Movie;
 import gizmo385.librarymanager.types.VideoGame;
+import gizmo385.util.Logger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,9 +24,13 @@ import java.util.Scanner;
 public class ItemLibrary
 {
 	private SingleLinkedList<Item> userLibrary = new SingleLinkedList<Item>();
+	private Logger actionLog = new Logger( "ilLog.txt" );
 
-	/** Default Constructor - does nothing */
-	public ItemLibrary() { };
+	/** Default Constructor - only informs log*/
+	public ItemLibrary() 
+	{ 
+		actionLog.publishToLog( "Creating ItemLibrary - empty list");
+	}
 
 	/**
 	 * Add multiple items to the library
@@ -33,15 +38,23 @@ public class ItemLibrary
 	 */
 	public ItemLibrary( Item[] items )
 	{
+		actionLog.publishToLog( "Creating ItemLibrary - adding " + items.length + " items" );
+		
 		for( Item i : items  )
 			this.userLibrary.insertInOrder( i );
 	}
 
 	/** Adds an Item to the ArrayList */
-	public void addItem( Item item ) { this.userLibrary.insertInOrder( item ); }
+	public void addItem( Item item )
+	{ 
+		this.userLibrary.insertInOrder( item ); 
+	}
 
 	/** Removes an Item by reference */
-	public boolean removeItem( Item item ) { return this.userLibrary.remove( item ); }
+	public boolean removeItem( Item item ) 
+	{ 
+		return this.userLibrary.remove( item ); 
+	}
 
 	/** Returns to ArrayList as an Item[] array */
 	public SingleLinkedList<Item> getLibrary()
@@ -60,6 +73,7 @@ public class ItemLibrary
 	 */
 	public SingleLinkedList<Item> search( String searchQuery )
 	{
+		actionLog.publishToLog( "Performing search for " + searchQuery );
 		SingleLinkedList<Item> results = new SingleLinkedList<Item>();
 		String trimmedQuery = searchQuery.trim(); //remove whitespace
 		
@@ -86,6 +100,7 @@ public class ItemLibrary
 	 */
 	public boolean loadLibrary()
 	{
+		actionLog.publishToLog( "Loading library from file" );
 		try {
 			Scanner fileScan = new Scanner( new File("library.dat") );
 			this.userLibrary = new SingleLinkedList<Item>();
@@ -236,17 +251,20 @@ public class ItemLibrary
 		catch ( NumberFormatException nfe )
 		{
 			System.err.println( "Invalid integer value passed to Integer.parseInt()" );
+			actionLog.publishToLog( nfe );
 			nfe.printStackTrace();
 			return false;
 		}
 		catch( FileNotFoundException fnfe )
 		{
 			System.err.println( "Library file could not be found!" );
+			actionLog.publishToLog( fnfe );
 			fnfe.printStackTrace();
 			return false;
 		}
 		catch( Exception e )
 		{
+			actionLog.publishToLog( e );
 			e.printStackTrace();
 			return false;
 		}
@@ -271,6 +289,7 @@ public class ItemLibrary
 	 */
 	public boolean saveLibrary()
 	{
+		actionLog.publishToLog( "Saving library to file" );
 		File libFile = new File( "library.dat" );
 
 		try
@@ -289,6 +308,7 @@ public class ItemLibrary
 		}
 		catch( IOException ioe )
 		{
+			actionLog.publishToLog( ioe );
 			ioe.printStackTrace();
 			return false;
 		}
