@@ -17,7 +17,8 @@
 </ul>
 </p><br><hr>
 
-<center> Folder Layout
+<center>
+Folder Layout
 ======================
  </center>
 <p>The folders within this project are layed out like so:
