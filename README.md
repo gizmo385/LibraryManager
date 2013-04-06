@@ -17,10 +17,9 @@
 </ul>
 </p><br><hr>
 
-<center>
-Folder Layout
+<center> Folder Layout </center>
 ==============
- </center>
+
 <p>The folders within this project are layed out like so:
 <ul>
 <li> src - the primary source folder
