@@ -19,7 +19,7 @@ public class AboutDialog extends JDialog {
 	private JButton closeAboutDialog;
 	
 	/**
-	 * Constructs the AboutDialog
+	 * Constructs the AboutDialog and adds its components
 	 * @param frame The parent frame
 	 */
 	public AboutDialog( JFrame frame ) {

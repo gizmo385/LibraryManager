@@ -15,18 +15,27 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+/**
+ * A log management window so that the user can view and manage the LM & IL logs
+ * @author cachapline8
+ *
+ */
 public class AdminDialog extends JDialog {
 	
 	private JButton migrateLogs, truncateLogs, printLogs, close;
 	private JTextArea ilLog, lmLog;
 	private Logger actionLog;
 	
+	/**
+	 * Constructs the JDialog and adds it's components
+	 * @param frame The parent frame
+	 */
 	public AdminDialog( JFrame frame ) {
 		
 		//dialog settings
 		super( frame, "Log Management" );
 		setLayout( new FlowLayout() );
-		setSize( 500, 370 );
+		setSize( 500, 395 );
 		setResizable( false );
 		setLocationRelativeTo( frame );
 		setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
