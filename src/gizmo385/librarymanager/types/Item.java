@@ -25,6 +25,7 @@ public class Item implements Comparable<Item>, SavableItem
 		this.genre = genre;
 		this.id = id;
 		this.tags.addAll( tags );
+		this.tags.add( id );
 	}
 
 	/** Returns the name */

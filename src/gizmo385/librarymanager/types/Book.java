@@ -72,7 +72,8 @@ public class Book extends Item implements SavableItem
 	/** Returns a string representation of this item */
 	public String toString()
 	{
-        StringBuilder sb = new StringBuilder( "Author: " );
+        StringBuilder sb = new StringBuilder( super.toString() );
+        sb.append( "Author" );
         sb.append( this.getAuthor() );
         sb.append( System.lineSeparator() );
         sb.append( "Genre: " );

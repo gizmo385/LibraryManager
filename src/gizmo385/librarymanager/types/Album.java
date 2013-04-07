@@ -37,7 +37,7 @@ public class Album extends Item implements SavableItem
 		this.addTag( artist );
 		this.addTag( label );
 		for( String s : songList )
-			this.addTag( s );
+			this.addTag( s.trim().toLowerCase() );
 	}
 
 	/** Returns the artist */

@@ -371,11 +371,10 @@ public class LibraryManagerClient
                             JOptionPane.showMessageDialog( frame, "Canceling item deletion!", "Canceled!", JOptionPane.INFORMATION_MESSAGE );
                         }
                     }
-                    else
-                    {
-                        JOptionPane.showMessageDialog( frame, "Item could not be found!", "Not found!", JOptionPane.ERROR_MESSAGE );
-                    }
                 }
+                
+                library.saveLibrary();
+                library.loadLibrary();
             } // end remove
 		} //end ActionPerformed()
 	} // end ButtonHandler

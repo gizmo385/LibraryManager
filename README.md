@@ -1,5 +1,4 @@
-<center>Library Manager</center>
-==============
+<center><h1>Library Manager</h1></center>
 
 <p>This personal library manager is designed to alleviate some of the organizational pressure that is introduced during the creation and management of a home library. </p>
 
@@ -17,8 +16,7 @@
 </ul>
 </p><br><hr>
 
-<center> Folder Layout </center>
-==============
+<center> <h1>Folder Layout</h1> </center>
 
 <p>The folders within this project are layed out like so:
 <ul>
@@ -34,6 +32,5 @@
 <li>doc - javadoc files for the project </li>
 </ul></p>
 <br><hr>
-<center> Generic Programming Information </center>
-========
+<center> <h1> Generic Programming Information </h1> </center>
 <p>This project is programmed entirely in Java and complied using JDK 1.7. The project was initially programmed in the Eclipse IDE, maintained by the Eclipse Foundation. It is now programmed using the IntelliJ IDEA 12 IDE maintined by JetBrains. </p><hr>
