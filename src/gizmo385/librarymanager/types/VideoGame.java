@@ -61,7 +61,8 @@ public class VideoGame extends Item implements SavableItem
 	/** Returns a string representation of this VideoGame */
 	public String toString()
 	{
-        StringBuilder sb = new StringBuilder( "Genre: " );
+        StringBuilder sb = new StringBuilder( super.toString() );
+        sb.append( "Genre: ");
         sb.append( this.getGenre() );
         sb.append( System.lineSeparator() );
         sb.append( "Console: " );
