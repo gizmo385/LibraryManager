@@ -10,7 +10,6 @@ import gizmo385.librarymanager.types.VideoGame;
 import gizmo385.util.Logger;
 
 import java.awt.CardLayout;
-import java.awt.Dialog.ModalityType;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -48,12 +46,14 @@ public class LibraryManagerClient
 	
 	private Logger actionLog = new Logger( "lmLog.txt" );
 	
+	private AboutDialog ab;
+	private AdminDialog ad;
+	
 	// Window components
 	private JFrame frame;
-	private JDialog aboutDialog;
 	private JMenuBar jmb;
 	private JMenu file, help, addItem;
-	private JMenuItem save, load, exit, remove, about, book, movie, videoGame, album, display;
+	private JMenuItem save, load, exit, remove, about, book, movie, videoGame, album, display, showAdminDialog;
 	private JTextArea primaryDisplay;
 	private JScrollPane jsc;
 	private JTextField searchQuery;
@@ -61,7 +61,7 @@ public class LibraryManagerClient
 	private JTextField bookAuthor, bookIsbn, bookPublisher, bookYearPublished, bookName, bookGenre, bookCopies, bookTags;
 	private JTextField movieDirector, movieRating, movieStarring, movieYearDirected, movieBarcodeNumber, movieName, movieGenre, movieCopies, movieTags;
 	private JTextField gameBarcodeNumber, gameConsole, gameContentRating, gameDeveloper, gamePublisher, gameName, gameGenre, gameCopies, gameTags;
-	private JButton submitSearch, cancelNewBook, cancelNewMovie, cancelNewVideoGame, cancelNewAlbum,submitBook, submitVideoGame, submitMovie, submitAlbum, displayLib, closeAboutDialog;
+	private JButton submitSearch, cancelNewBook, cancelNewMovie, cancelNewVideoGame, cancelNewAlbum,submitBook, submitVideoGame, submitMovie, submitAlbum, displayLib;
 	private JPanel libraryDisplay, addBook, addMovie, addVideoGame, addAlbum, cards;
 	private CardLayout cardLayout = new CardLayout();
 	private ButtonHandler bh = new ButtonHandler();
@@ -92,7 +92,11 @@ public class LibraryManagerClient
 		setupAddAlbumLayout();
 		
 		/* About Dialog */
-		setupAboutDialog();
+		actionLog.publishToLog( "Creating about dialog..." );
+		ab = new AboutDialog( frame );
+		
+		actionLog.publishToLog( "Creating admin dialog..." );
+		ad = new AdminDialog( frame );
 		
 		/* Frame settings */
 		frame = new JFrame( "Library Manager" );
@@ -164,10 +168,6 @@ public class LibraryManagerClient
 			{
 				actionLog.publishToLog( "Closing Library Manager application" );
 				System.exit( 1 );
-			}
-			else if( ae.getSource() == closeAboutDialog ) // close about dialog
-			{
-				changeAboutDialogVisibility( false );
 			}
 			else if( ae.getSource() == searchQuery || ae.getSource() == submitSearch ) // Search library
 			{
@@ -348,7 +348,7 @@ public class LibraryManagerClient
 			}
 			else if( ae.getSource() == about ) // about dialog
 			{
-				changeAboutDialogVisibility( true );
+				ab.flipVisibility();
 			}
             else if( ae.getSource() == remove ) //remove item
             {
@@ -376,38 +376,13 @@ public class LibraryManagerClient
                 library.saveLibrary();
                 library.loadLibrary();
             } // end remove
+            else if( ae.getSource() == showAdminDialog )
+            {
+            	ad.flipVisibility();
+            }
+			
 		} //end ActionPerformed()
 	} // end ButtonHandler
-
-    /** Sets up components for the about dialog */
-	public void setupAboutDialog()
-	{
-		actionLog.publishToLog( "Setting up AboutDialog..." );
-		
-		closeAboutDialog = new JButton( "Close" );
-		closeAboutDialog.addActionListener( bh );
-		
-		aboutDialog = new JDialog( frame, "About" );
-		aboutDialog.setLayout( new FlowLayout() );
-		aboutDialog.setSize( 350, 120 );
-		aboutDialog.setResizable(false);
-		aboutDialog.setLocationRelativeTo( frame );
-		aboutDialog.setDefaultCloseOperation( JDialog.DISPOSE_ON_CLOSE );
-		aboutDialog.add( new JLabel( "Library Manager - Created by gizmo385" ) );
-		aboutDialog.add( new JLabel( "Source code available on Github repo" ) );
-		aboutDialog.add( new JLabel( "Programmed using the open source Eclipse IDE" ) );
-		aboutDialog.add( closeAboutDialog );
-		aboutDialog.setModalityType( ModalityType.APPLICATION_MODAL );
-		aboutDialog.setVisible( false );
-	}
-
-    /** Changes the visibility constant on the aboutDialog */
-	public void changeAboutDialogVisibility( boolean visibility )
-    {
-		actionLog.publishToLog( "Changing aboutDialog visibility from " + aboutDialog.isVisible() + " to " + visibility );
-		
-        aboutDialog.setVisible( visibility );
-    }
 
     /** Sets up components for the main frame */
 	public void setupPrimary()
@@ -435,6 +410,8 @@ public class LibraryManagerClient
 		movie.addActionListener( bh );
 		album = new JMenuItem( "Album" );
 		album.addActionListener( bh );
+		showAdminDialog = new JMenuItem( "Log Management" );
+		showAdminDialog.addActionListener( bh );
 		
 		addItem = new JMenu( "Add item" );
 		addItem.add( album );
@@ -458,9 +435,10 @@ public class LibraryManagerClient
 		jmb.add( file );
 		jmb.add( addItem );
 		jmb.add( help );
+		jmb.add( showAdminDialog );
 		
 		/* Primary Library Display - Displays library contents & searches */
-		primaryDisplay = new JTextArea( 20, 43);
+		primaryDisplay = new JTextArea( 20, 43 );
 		primaryDisplay.setToolTipText("Library contents displayed here");
 		primaryDisplay.setEditable(false);
 		jsc = new JScrollPane(primaryDisplay);
