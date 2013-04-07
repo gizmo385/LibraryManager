@@ -101,6 +101,12 @@ public class Item implements Comparable<Item>, SavableItem
     {
         return "Name: " + this.getName() + "\nCopies: " + this.getCopies() + "\n";
     }
+	
+	/** Check that the object is an Item and them returns the equals() method describe in String */
+	public boolean equals( Object o )
+	{	
+		return o instanceof Item ? ((Item)o).getName().equals( this.getName() ) : false;
+	}
 
     /** Save data for this item */
     public String toSaveString()

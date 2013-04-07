@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 /**
  * A class to manage a library of Items
  * @author cachapline8
@@ -74,6 +76,7 @@ public class ItemLibrary
 	public SingleLinkedList<Item> search( String searchQuery )
 	{
 		actionLog.publishToLog( "Performing search for " + searchQuery );
+		
 		SingleLinkedList<Item> results = new SingleLinkedList<Item>();
 		String trimmedQuery = searchQuery.trim(); //remove whitespace
 		
@@ -257,10 +260,16 @@ public class ItemLibrary
 		}
 		catch( FileNotFoundException fnfe )
 		{
-			System.err.println( "Library file could not be found!" );
 			actionLog.publishToLog( fnfe );
-			fnfe.printStackTrace();
-			return false;
+			
+			int create = JOptionPane.showConfirmDialog(null, "Library file could not be found!" + System.lineSeparator() + System.lineSeparator() + "Would you like to create one?" );
+			
+			if( create == JOptionPane.YES_OPTION ) {
+				createNewLibraryFile();
+			}
+			else {
+				actionLog.publishToLog( "Not creating new library file!" );
+			}
 		}
 		catch( Exception e )
 		{
@@ -271,6 +280,27 @@ public class ItemLibrary
 
 		return true;
 	} // end LoadLibrary()
+	
+	public void createNewLibraryFile()
+	{
+		actionLog.publishToLog( "Attempting to create new library file..." );
+		File libraryFile = new File("library.dat");
+		try {
+			if( libraryFile.createNewFile() ) {
+				actionLog.publishToLog( "Successfully created new library file!" );
+				this.loadLibrary();
+			}
+			else {
+				
+				actionLog.publishToLog( "Failed to create new library file!" );
+			}
+			
+		} 
+		catch ( IOException ioe ) {
+			System.err.println( "Failed to create new file!" );
+			actionLog.publishToLog( ioe );
+		}
+	}
 
 	/**
 	 * Saves the library to a file
