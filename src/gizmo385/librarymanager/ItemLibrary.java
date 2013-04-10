@@ -67,6 +67,11 @@ public class ItemLibrary
 
 		return result;
 	}
+	
+	/** Truncates an array */
+	public void truncateLibrary() {
+		this.userLibrary = new SingleLinkedList<Item>();
+	}
 
 	/**
 	 * Searches based on the tags of every item
@@ -112,139 +117,24 @@ public class ItemLibrary
 			while( fileScan.hasNextLine() )
 			{
 				String castTag = fileScan.nextLine();
-				Item item;
 
-				if( castTag.equalsIgnoreCase( "[book]" ) )
-				{
-					String name, genre, author, publisher, id;
-					SingleLinkedList<String> tags = new SingleLinkedList<String>();
-					int copies, yearPublished;
-
-					name = fileScan.nextLine();
-					copies = Integer.parseInt( fileScan.nextLine() );
-					genre = fileScan.nextLine();
-
-					Scanner tagsParser = new Scanner( fileScan.nextLine() );
-					tagsParser.useDelimiter( ";" );
-
-					while( tagsParser.hasNext() )
-						tags.add( tagsParser.next() );
-					tagsParser.close();
-
-					author = fileScan.nextLine();
-					publisher = fileScan.nextLine();
-					id = fileScan.nextLine();
-					yearPublished = Integer.parseInt( fileScan.nextLine() );
-
-					item = new Book( name, copies, tags,  id, yearPublished, publisher, author, genre);
-					this.addItem( item );
+				if( castTag.equalsIgnoreCase( "[book]" ) ) {					
+					this.addItem( loadBook( fileScan ) );
 				}
 
-				else if( castTag.equalsIgnoreCase( "[movie]" ) )
-				{
-					String name, genre, director, rating, id;
-					String[] starring;
-					SingleLinkedList<String> tags = new SingleLinkedList<String>();
-					int yearDirected, copies;
-
-					name = fileScan.nextLine();
-					copies = Integer.parseInt( fileScan.nextLine() );
-					genre = fileScan.nextLine();
-
-					//Read the tags
-					Scanner tagsParser = new Scanner( fileScan.nextLine() );
-					tagsParser.useDelimiter( ";" );
-					while( tagsParser.hasNext() )
-						tags.add( tagsParser.next() );
-					tagsParser.close();
-
-					//Read the star list
-					ArrayList<String> starList = new ArrayList<String>();
-					tagsParser = new Scanner( fileScan.nextLine() );
-					tagsParser.useDelimiter( "," );
-					while( tagsParser.hasNext() )
-						starList.add( tagsParser.next() );
-					tagsParser.close();
-					starring = new String[ starList.size() ];
-					for( int i = 0; i < starList.size(); i++ )
-						starring[i] = starList.get(i);
-
-					director = fileScan.nextLine();
-					rating = fileScan.nextLine();
-					id = fileScan.nextLine();
-					yearDirected = Integer.parseInt( fileScan.nextLine() );
-
-					item = new Movie( name, copies, tags, genre, director, rating, starring, yearDirected, id);
-					this.addItem( item );
+				else if( castTag.equalsIgnoreCase( "[movie]" ) ) {
+					this.addItem( loadMovie( fileScan ) );
 				}
 
-				else if( castTag.equalsIgnoreCase( "[videogame]" ) )
-				{
-					String name, genre, developer, publisher, console, contentRating, id;
-					SingleLinkedList<String> tags = new SingleLinkedList<String>();
-					int copies;
-
-					name = fileScan.nextLine();
-					copies = Integer.parseInt( fileScan.nextLine() );
-					genre = fileScan.nextLine();
-
-					//Read the tags
-					Scanner tagsParser = new Scanner( fileScan.nextLine() );
-					tagsParser.useDelimiter( ";" );
-					while( tagsParser.hasNext() )
-						tags.add( tagsParser.next() );
-					tagsParser.close();
-
-					developer = fileScan.nextLine();
-					publisher = fileScan.nextLine();
-					console = fileScan.nextLine();
-					contentRating = fileScan.nextLine();
-					id = fileScan.nextLine();
-
-					item = new VideoGame( name, copies, tags, developer, publisher, genre, console, contentRating, id);
-					this.addItem( item );
+				else if( castTag.equalsIgnoreCase( "[videogame]" ) ) {					
+					this.addItem( loadVideoGame( fileScan ) );
 				}
 
-				else if( castTag.equalsIgnoreCase( "[album]" ) )
-				{
-					String name, genre, artist, label, barcodeNumber;
-					SingleLinkedList<String> tags = new SingleLinkedList<String>();
-					String[] songs;
-					int copies, yearReleased;
-
-					name = fileScan.nextLine();
-					copies = Integer.parseInt( fileScan.nextLine() );
-					genre = fileScan.nextLine();
-
-					//Read the tags
-					Scanner tagsParser = new Scanner( fileScan.nextLine() );
-					tagsParser.useDelimiter( ";" );
-					while( tagsParser.hasNext() )
-						tags.add( tagsParser.next() );
-					tagsParser.close();
-
-					//Read the song list
-					ArrayList<String> songList = new ArrayList<String>();
-					tagsParser = new Scanner( fileScan.nextLine() );
-					tagsParser.useDelimiter( "," );
-					while( tagsParser.hasNext() )
-						songList.add( tagsParser.next() );
-					tagsParser.close();
-					songs = new String[ songList.size () ];
-					for( int i = 0; i < songList.size(); i++ )
-						songs[i] = songList.get(i);
-
-					artist = fileScan.nextLine();
-					label = fileScan.nextLine();
-					barcodeNumber = fileScan.nextLine();
-					yearReleased = Integer.parseInt( fileScan.nextLine() );
-
-					item = new Album( name, copies, tags, artist, genre, label, songs, yearReleased, barcodeNumber );
-					this.addItem( item );
+				else if( castTag.equalsIgnoreCase( "[album]" ) ) { 					
+					this.addItem( loadAlbum( fileScan ) );
 				}
 
-				else
-				{
+				else {
                     castTag = fileScan.nextLine();
 				}
 			}
@@ -271,13 +161,7 @@ public class ItemLibrary
 				actionLog.publishToLog( "Not creating new library file!" );
 			}
 		}
-		catch( Exception e )
-		{
-			actionLog.publishToLog( e );
-			e.printStackTrace();
-			return false;
-		}
-
+		
 		return true;
 	} // end LoadLibrary()
 	
@@ -324,8 +208,9 @@ public class ItemLibrary
 
 		try
 		{
-			if( libFile.exists() )
+			if( libFile.exists() ) {
 				libFile.delete();
+			}
 
 			libFile.createNewFile();
 			BufferedWriter fileOut = new BufferedWriter(new FileWriter( libFile ));
@@ -345,4 +230,129 @@ public class ItemLibrary
 
 		return true;
 	} // end saveLibrary
+	
+	/** Loads a book from the Scanner */
+	public Book loadBook( Scanner fileScan ) {
+		String name, genre, author, publisher, id;
+		SingleLinkedList<String> tags = new SingleLinkedList<String>();
+		int copies, yearPublished;
+
+		name = fileScan.nextLine();
+		copies = Integer.parseInt( fileScan.nextLine() );
+		genre = fileScan.nextLine();
+
+		Scanner tagsParser = new Scanner( fileScan.nextLine() );
+		tagsParser.useDelimiter( ";" );
+
+		while( tagsParser.hasNext() )
+			tags.add( tagsParser.next() );
+		tagsParser.close();
+
+		author = fileScan.nextLine();
+		publisher = fileScan.nextLine();
+		id = fileScan.nextLine();
+		yearPublished = Integer.parseInt( fileScan.nextLine() );
+		
+		return new Book( name, copies, tags,  id, yearPublished, publisher, author, genre);
+	}
+	
+	/** Loads a VideoGame from the Scanner */
+	public VideoGame loadVideoGame( Scanner fileScan ) {
+		String name, genre, developer, publisher, console, contentRating, id;
+		SingleLinkedList<String> tags = new SingleLinkedList<String>();
+		int copies;
+
+		name = fileScan.nextLine();
+		copies = Integer.parseInt( fileScan.nextLine() );
+		genre = fileScan.nextLine();
+
+		//Read the tags
+		Scanner tagsParser = new Scanner( fileScan.nextLine() );
+		tagsParser.useDelimiter( ";" );
+		while( tagsParser.hasNext() )
+			tags.add( tagsParser.next() );
+		tagsParser.close();
+
+		developer = fileScan.nextLine();
+		publisher = fileScan.nextLine();
+		console = fileScan.nextLine();
+		contentRating = fileScan.nextLine();
+		id = fileScan.nextLine();
+
+		return new VideoGame( name, copies, tags, developer, publisher, genre, console, contentRating, id);
+	}
+	
+	/** Loads an Album from the Scanner */
+	public Album loadAlbum( Scanner fileScan ) {
+		String name, genre, artist, label, barcodeNumber;
+		SingleLinkedList<String> tags = new SingleLinkedList<String>();
+		String[] songs;
+		int copies, yearReleased;
+
+		name = fileScan.nextLine();
+		copies = Integer.parseInt( fileScan.nextLine() );
+		genre = fileScan.nextLine();
+
+		//Read the tags
+		Scanner tagsParser = new Scanner( fileScan.nextLine() );
+		tagsParser.useDelimiter( ";" );
+		while( tagsParser.hasNext() )
+			tags.add( tagsParser.next() );
+		tagsParser.close();
+
+		//Read the song list
+		ArrayList<String> songList = new ArrayList<String>();
+		tagsParser = new Scanner( fileScan.nextLine() );
+		tagsParser.useDelimiter( "," );
+		while( tagsParser.hasNext() )
+			songList.add( tagsParser.next() );
+		tagsParser.close();
+		songs = new String[ songList.size () ];
+		for( int i = 0; i < songList.size(); i++ )
+			songs[i] = songList.get(i);
+
+		artist = fileScan.nextLine();
+		label = fileScan.nextLine();
+		barcodeNumber = fileScan.nextLine();
+		yearReleased = Integer.parseInt( fileScan.nextLine() );
+
+		return new Album( name, copies, tags, artist, genre, label, songs, yearReleased, barcodeNumber );
+	}
+	
+	/** Loads a movie from the Scanner */
+	public Movie loadMovie( Scanner fileScan ) {
+		String name, genre, director, rating, id;
+		String[] starring;
+		SingleLinkedList<String> tags = new SingleLinkedList<String>();
+		int yearDirected, copies;
+
+		name = fileScan.nextLine();
+		copies = Integer.parseInt( fileScan.nextLine() );
+		genre = fileScan.nextLine();
+
+		//Read the tags
+		Scanner tagsParser = new Scanner( fileScan.nextLine() );
+		tagsParser.useDelimiter( ";" );
+		while( tagsParser.hasNext() )
+			tags.add( tagsParser.next() );
+		tagsParser.close();
+
+		//Read the star list
+		ArrayList<String> starList = new ArrayList<String>();
+		tagsParser = new Scanner( fileScan.nextLine() );
+		tagsParser.useDelimiter( "," );
+		while( tagsParser.hasNext() )
+			starList.add( tagsParser.next() );
+		tagsParser.close();
+		starring = new String[ starList.size() ];
+		for( int i = 0; i < starList.size(); i++ )
+			starring[i] = starList.get(i);
+
+		director = fileScan.nextLine();
+		rating = fileScan.nextLine();
+		id = fileScan.nextLine();
+		yearDirected = Integer.parseInt( fileScan.nextLine() );
+
+		return new Movie( name, copies, tags, genre, director, rating, starring, yearDirected, id);
+	}
 } // end ItemLibrary
