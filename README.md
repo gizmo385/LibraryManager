@@ -33,4 +33,4 @@
 </ul></p>
 <br><hr>
 <center> <h1> Generic Programming Information </h1> </center>
-<p>This project is programmed entirely in Java and complied using JDK 1.7. The project was initially programmed in the Eclipse IDE, maintained by the Eclipse Foundation. It is now programmed using the IntelliJ IDEA 12 IDE maintined by JetBrains. </p><hr>
+<p>This project is programmed entirely in Java and complied using JDK 1.7.
