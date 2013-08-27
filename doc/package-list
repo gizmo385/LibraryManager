@@ -1,5 +1,3 @@
-gizmo385.datastructures.sll
-gizmo385.librarymanager
-gizmo385.librarymanager.types
-gizmo385.librarymanager.ui
-gizmo385.util
+com.gizmo385.lm
+com.gizmo385.lm.gui
+com.gizmo385.lm.types
